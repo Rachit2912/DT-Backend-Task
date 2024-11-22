@@ -1,0 +1,135 @@
+openapi: 3.0.0
+info:
+  title: Nudge Creation API
+  description: "API for creating, updating, retrieving, and deleting nudges for events."
+  contact:
+    email: rachitsandeepjoshi@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: http://localhost:3000/api/v1
+  description: Local Deployment Server
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+paths:
+  /nudges:
+    get:
+      tags:
+      - Nudges
+      summary: Fetch all nudges
+      description: Retrieves a list of all nudges.
+      responses:
+        "200":
+          description: A list of nudges
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Nudge'
+    post:
+      tags:
+      - Nudges
+      summary: Create a new nudge
+      description: "Creates a new nudge with a title, description, schedule, and more."
+      operationId: createNudge
+      requestBody:
+        description: Details of the nudge to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Nudge'
+        required: true
+      responses:
+        "201":
+          description: Nudge created successfully
+        "400":
+          description: Invalid input
+  /nudges/{id}:
+    put:
+      tags:
+      - Nudges
+      summary: Update an existing nudge
+      description: Updates the details of a nudge by ID.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the nudge to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Updated details of the nudge
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Nudge'
+        required: true
+      responses:
+        "200":
+          description: Nudge updated successfully
+        "404":
+          description: Nudge not found
+    delete:
+      tags:
+      - Nudges
+      summary: Delete a nudge
+      description: Deletes a nudge by ID.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the nudge to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Nudge deleted successfully
+        "404":
+          description: Nudge not found
+components:
+  schemas:
+    Nudge:
+      required:
+      - description
+      - scheduledOn
+      - timings
+      - title
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        title:
+          type: string
+          example: Weekly Team Meeting
+        scheduledOn:
+          type: string
+          format: date
+          example: 2024-12-01
+        timings:
+          type: string
+          example: 14:00 - 15:00
+        description:
+          type: string
+          example: A weekly sync-up to discuss ongoing projects and blockers.
+        image:
+          type: string
+          format: url
+          example: images.png
+        icon:
+          type: string
+          example: 📅
+        invitation:
+          type: string
+          example: Join us for the team meeting this Friday!
