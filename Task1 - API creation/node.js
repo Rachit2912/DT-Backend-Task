@@ -35,9 +35,9 @@ app.get("/api/v3/app/events", async (req, res) => {
     if (type === "latest") {
       const eventsList = await events
         .find()
-        .sort({ schedule: -1 }) // Sort by schedule (latest first)
-        .skip((page - 1) * parseInt(limit)) // Skip for pagination
-        .limit(parseInt(limit)) // Limit results
+        .sort({ schedule: -1 })
+        .skip((page - 1) * parseInt(limit))
+        .limit(parseInt(limit))
         .toArray();
 
       const totalEvents = await events.countDocuments();
